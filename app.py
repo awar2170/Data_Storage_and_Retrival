@@ -1,23 +1,59 @@
-from flask import Flask
+#Set Up the Flask Weather App 
+# Import Dependences 
 
-#Create an app instance - or a singuar version of something 
+import datetime as dt 
+import numpy as np 
+import pandas as pd 
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
+
+from flask import Flask, jsonify 
+# You want to import flask after your SQLAlchemy Dependencies 
+
+#### Set Up the Database #### 
+engine = create_engine("sqlite:///hawaii.sqlite") # This connects to our database 
+
+Base = automap_base()
+# This reflects teh database into our classes.
+# I don't know what this means 
+#### QUESTION #### 
+
+# Reflect your code into the database: 
+Base.prepare(engine, reflect=True)
+# Now we can save our references to each table 
+
+Measurement = Base.classes.measurement 
+Station = Base.classes.station 
+
+# create a session link 
+session = Session(engine)
+
+#### Set Up Flask #### 
 app = Flask(__name__)
+# The __name__ variable is a special variable in python. __name__ is replaced by the name of the file
+# For example, __name__ right now is called "app", but if the file was named "example.py", then __name__ would hold the value "example"
 
-# The __name__ variable inside of the Flask function denotes the name of the current function 
-# We can use __name__ to det if your code is being run from the command line or if it has been imported into another piece of code 
-# Variables with underscores before and after them are called magic methods in Python 
+#### Create the Welcome Route #### 
+# First: Define what our route will be
+# We want welcome route to be the root, which is basically the homepage 
 
-#Create Flask Routes 
-# We need to ID the starting point; the root 
-@app.route('/') #This makes the base root for the app 
+## IMPORTANT NOTE: ALL ROUTES SHOULD GO AFTER THE APP=FLASK(__NAME__) LINE OF CODE 
 
-# Eric says it's normal to not know if your code is going to work until you run it in the terminal 
+@app.route("/") # This is the welcome root, it's the first route 
+# We now want routing infomration for each of the other routes 
+#First: Create a function with a return statement 
+def welcome():
+    return(
+    '''
+    Welcome to the Climate Analysis API!
+    Available Routes:
+    /api/v1.0/precipitation
+    /api/v1.0/stations
+    /api/v1.0/tobs
+    /api/v1.0/temp/start/end
+    ''')
 
-def hello_world(): 
-    return 'Hello World'
+#### Precipitation Route #### 
 
-# THe above code should have created the first Flask route
-# Run a Flask App 
-# You don't run Flask Apps like normal python files 
-# You open powershell and navigate to your folder with the app and type "set FLASK_APP=app.py", run that line (nothing really happens), then type "flask run"
-# You'll be given a url, put that into a new tab and search it 
