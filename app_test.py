@@ -21,3 +21,5 @@ def hello_world():
 # You don't run Flask Apps like normal python files 
 # You open powershell and navigate to your folder with the app and type "set FLASK_APP=app.py", run that line (nothing really happens), then type "flask run"
 # You'll be given a url, put that into a new tab and search it 
+
+# Set Up the Database and Flask
